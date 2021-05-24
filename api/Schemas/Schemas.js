@@ -1,0 +1,7 @@
+const SavedDaySchema = require("./SavedDayModel")
+const CategorySchema = require("./CategoryModel")
+const TaskSchema = require("./TaskModel")
+const mongoose = require("mongoose")
+module.exports.SavedDayModel = mongoose.model("Day", SavedDaySchema)
+module.exports.CategoryModel = mongoose.model("Category", CategorySchema)
+module.exports.TaskModel = mongoose.model("Task", TaskSchema)
