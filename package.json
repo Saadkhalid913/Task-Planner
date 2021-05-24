@@ -1,0 +1,19 @@
+{
+  "name": "task-planner",
+  "version": "1.0.0",
+  "description": "Node app for task planning",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Saadkhalid913/Task-Planner.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Saadkhalid913/Task-Planner/issues"
+  },
+  "homepage": "https://github.com/Saadkhalid913/Task-Planner#readme"
+}
