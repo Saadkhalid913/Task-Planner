@@ -15,9 +15,9 @@ router.get("/", async (req,res) => {
 
 router.post("/", async (req, res) => {
   // add validation and add joi function  
-
   const body = req.body
   const newTask = new TaskModel(body)
+  console.log(newTask)
   const response = await newTask.save().catch(err => res.send(err))
   res.send(response)
 })
@@ -25,11 +25,10 @@ router.post("/", async (req, res) => {
 router.post("/subtask/:id", async (req, res) => {
   const body = req.body
   const id = req.params.id
-  console.log(body)
   const newSubtask = new SubTaskModel(body);
   const Task = await TaskModel.findById(id);
   Task.subtasks.push(newSubtask)
-  const response = await Task.save().catch(err => res.send(err));
+  const response = await Task.save().catch(err => res.send(err.errors));
   res.send(response);
 })
 
