@@ -6,6 +6,9 @@ const router = express.Router()
 // add joi validation export function later to this module 
 const TaskModel = require("../Schemas/Schemas").TaskModel
 const SubTaskModel = require("../Schemas/Schemas").SubTaskModel 
+const validateSubtask = require("../Schemas/SubTaskModel").validateSubtask
+
+const validate = 
 
 console.log(TaskModel)
 router.get("/", async (req,res) => {
@@ -28,8 +31,13 @@ router.post("/subtask/:id", async (req, res) => {
   const newSubtask = new SubTaskModel(body);
   const Task = await TaskModel.findById(id);
   Task.subtasks.push(newSubtask)
-  const response = await Task.save().catch(err => res.send(err.errors));
-  res.send(response);
+  try{
+    const response = await Task.save()
+    res.send(response)
+  }
+  catch(err) {
+    res.send(err.errors)
+  }
 })
 
 
