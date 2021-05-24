@@ -11,6 +11,10 @@
   margin: 0;
 }
 
+div {
+  transition-duration: 250ms;
+}
+
 button {
   outline: none;
   border: none;
@@ -39,6 +43,7 @@ button {
 }
 #sidebar-toggle:active {
   color: var(--main-secondary);
+  transform: scale(1.4, 1.4);
 }
 
 /* main body */
@@ -54,4 +59,93 @@ button {
   position: absolute;
   left: 0%;
   display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 1.5rem;
+}
+
+.sidebar p {
+  font-weight: 700;
+  font-size: 1.5rem;
+
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen,
+    Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+}
+
+.sidebar ul {
+  padding-top: 0.5rem;
+}
+li {
+  font-size: 1.25rem;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen,
+    Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+  list-style-type: none;
+}
+
+/* homepage */
+
+.homepage-wrapper {
+  display: flex;
+  flex-direction: column;
+  background-color: var(--main-background);
+  width: 100%;
+  height: 100vh;
+  padding: 4rem;
+}
+
+.homepage-wrapper .table-titles {
+  margin: 0 auto;
+  height: 3rem;
+  display: flex;
+  width: 65%;
+  margin-bottom: 1rem;
+}
+.table-titles span {
+  font-weight: 600;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen,
+    Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+  font-size: 1.25rem;
+  border-right: 1.5px solid black;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.main-task-list-wrapper {
+  margin: 0 auto;
+  width: 65%;
+  border: 1px solid black;
+}
+
+.main-task-list {
+  width: 100%;
+  height: 100%;
+}
+
+.list-task {
+  height: 4rem;
+  display: flex;
+  align-items: center;
+}
+.list-task span {
+  justify-content: center;
+  display: flex;
+  align-items: center;
+  height: 100%;
+  font-size: 1rem;
+}
+
+.list-task .list-task-name {
+  width: 60%;
+  justify-content: flex-start;
+  padding-left: 2rem;
+}
+
+.list-task .list-task-priority {
+  width: 20%;
+  background-color: red;
+}
+
+.list-task .list-task-deadline {
+  width: 20%;
 }

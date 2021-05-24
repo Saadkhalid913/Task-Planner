@@ -14,9 +14,40 @@
     </div>
 
     <div class="main-page-body">
-      <div class="sidebar"></div>
+      <div class="sidebar" id="sidebar">
+        <p>Categories</p>
+        <ul>
+          <a><li>Category 1</li></a>
+          <a><li>Category 2</li></a>
+          <a><li>Category 3</li></a>
+          <a><li>Category 4</li></a>
+        </ul>
+      </div>
 
-      <div class="homepage-wrapper"></div>
+      <div class="homepage-wrapper">
+        <div class="table-titles">
+          <span
+            style="
+              width: 60%;
+              justify-content: flex-start;
+              padding-left: 0.5rem;
+            "
+            >Name</span
+          >
+          <span style="width: 20%">Priority</span>
+          <span style="width: 20%">Deadline</span>
+        </div>
+
+        <div class="main-task-list-wrapper">
+          <ul class="main-task-list" id="main-task-list">
+            <li class="list-task">
+              <span class="list-task-name">This is the task name</span>
+              <span class="list-task-priority">Urgent</span>
+              <span class="list-task-deadline">June 11, 2020</span>
+            </li>
+          </ul>
+        </div>
+      </div>
     </div>
   </body>
   <script src="./js/homepage.js"></script>
