@@ -9,6 +9,8 @@ const SubTaskSchema = new mongoose.Schema({
   Completed: Boolean
 })
 
+
+// WIP function 
 function validateSubtask(body) {
   const schema = Joi.object({
     name: Joi.string().min(3).max(255).required(),
@@ -21,6 +23,6 @@ function validateSubtask(body) {
 }
 
 module.exports.SubTaskSchema = SubTaskSchema
-module.exports.validateSubtask = validateSubtask
+// module.exports.validateSubtask = validateSubtask
 
 
