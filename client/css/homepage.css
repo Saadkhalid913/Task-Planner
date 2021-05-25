@@ -29,6 +29,25 @@ button {
   height: 80px;
   background-color: var(--main-black-tone);
   align-items: center;
+  padding-left: 3rem;
+  padding-right: 3rem;
+  justify-content: space-between;
+}
+
+#popup-toggle {
+  position: relative;
+  margin-right: 2rem;
+  background-color: var(--main-black-tone);
+  color: var(--main-background);
+  font-size: 3rem;
+  font-weight: 300;
+}
+#popup-toggle:hover {
+  transform: scale(1.2, 1.2);
+}
+#popup-toggle:active {
+  color: var(--main-secondary);
+  transform: scale(1.4, 1.4);
 }
 
 #sidebar-toggle {
@@ -36,7 +55,6 @@ button {
   background-color: var(--main-black-tone);
   font-size: 1.75rem;
   font-weight: 900;
-  margin-left: 2rem;
 }
 
 #sidebar-toggle:hover {
@@ -163,4 +181,22 @@ li {
   padding: 2rem;
   padding-top: 1rem;
   /* display: none; */
+}
+
+.sidebar-category:hover {
+  color: var(--main-background);
+}
+
+.add-task-popup {
+  height: 0vh;
+  width: 60vw;
+  background-color: var(--main-black-tone);
+  position: fixed;
+  z-index: 1;
+  opacity: 0.95;
+  margin: 0 auto;
+  right: 50%;
+  transform: translate(50%, 20%);
+  visibility: hidden;
+  transition-duration: 250ms;
 }

@@ -5,7 +5,8 @@ const TaskSchema = new mongoose.Schema({
   priority: {type: String, enum:["low", "medium", "high", "urgent", "undecided"], default: "undecided", lowercase: true},
   link: {type: String, required: false, minlength: 8, maxlength: 255},
   deadline: {type: Date, required: false},
-  subtasks: {type: [SubTaskSchema], default: Array}
+  subtasks: {type: [SubTaskSchema], default: Array},
+  category: {type:String, default: "Unset", lowercase: true, unique: true, minlength: 3, maxlength: 255}
 })
 
 module.exports = TaskSchema

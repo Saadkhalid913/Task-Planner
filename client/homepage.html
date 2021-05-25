@@ -9,18 +9,21 @@
   </head>
 
   <body>
+    <div class="add-task-popup" id="add-task-popup"></div>
+
     <div class="header">
       <button id="sidebar-toggle">></button>
+      <button id="popup-toggle">+</button>
     </div>
 
     <div class="main-page-body">
       <div class="sidebar" id="sidebar">
         <p>Categories</p>
-        <ul>
-          <a><li>Category 1</li></a>
-          <a><li>Category 2</li></a>
-          <a><li>Category 3</li></a>
-          <a><li>Category 4</li></a>
+        <ul id="sidebar-list">
+          <a class="sidebar-category"><li>Category 1</li></a>
+          <a class="sidebar-category"><li>Category 2</li></a>
+          <a class="sidebar-category"><li>Category 3</li></a>
+          <a class="sidebar-category"><li>Category 4</li></a>
         </ul>
       </div>
 
