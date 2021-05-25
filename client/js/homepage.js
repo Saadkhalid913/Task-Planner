@@ -10,4 +10,12 @@ function ToggleSidebar(){
   else  sidebar.style.left = "0%"
 }
 
+// test function 
+function change(id) {
+  const item = document.getElementById("change")
+  item.style.transitionDuration = "350ms"
+  if (item.style.height == "100%") item.style.height = "4rem"
+  else item.style.height = "100%"
+}
+
 main()
