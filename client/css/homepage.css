@@ -254,18 +254,6 @@ li {
 .subtask-deadline {
   width: 20%;
 }
-/* .list-task-button-wrapper {
-  display: flex;
-  justify-content: center;
-}
-
-.list-task-button-wrapper button {
-  background-color: #648de5;
-  color: white;
-  height: 2rem;
-  width: 4rem;
-  border-radius: 6px;
-} */
 
 .list-task-expand {
   background-color: var(--main-tertiary);

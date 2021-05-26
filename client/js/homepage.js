@@ -17,30 +17,39 @@ function main() {
   const AddTaskPopupToggleButton = document.getElementById("popup-toggle")
   AddTaskPopupToggleButton.addEventListener("click", showPopup)
   AddCategories()
-  GetTasks()
+
+  const filter = new URLSearchParams(window.location.search).get("filter")
+  console.log(filter)
+  GetTasks(filter)
 }
 
 async function AddCategories() {
   const response = await fetch("http://localhost:3000/api/categories")
   const Categories = await response.json() 
   for (let category of Categories) {
-    const target = window.location + `?filter=${category._id}`
+    const target =  window.location.href.split('?')[0] + `?filter=${category.name}`
     const CategoryElement =  `<a href = ${target} class="sidebar-category"><li>${category.name}</li></a>`
     document.getElementById("sidebar-list").innerHTML+=CategoryElement
   }
   }
 
-async function GetTasks() {
+async function GetTasks(filter) {
   const response = await fetch("http://localhost:3000/api/tasks")
   const tasks = await response.json()
-  for (let task of tasks)
+  for (let task of tasks){
+  if (filter == "all" || (!filter))
     CreateListTask(task);
+  else if (task.category.toLowerCase() == filter.toLowerCase())
+    CreateListTask(task);
+  else
+    continue
+  }
 }
 
 function ToggleSidebar(){
   const sidebar = document.getElementById("sidebar")
-  if (sidebar.style.left == "0%" || !sidebar.style.left) sidebar.style.left = "-15%"
-  else  sidebar.style.left = "0%"
+  if (sidebar.style.left != "0%") sidebar.style.left = "0%"
+  else sidebar.style.left = "-15%"
 }
 
 
@@ -104,9 +113,6 @@ function CreateListTask(Task){
 
   const taskList = document.getElementById("main-task-list")
   taskList.appendChild(taskElement)
-
-
-
 }
 
 function CreateSubtaskList(Subtasks){
