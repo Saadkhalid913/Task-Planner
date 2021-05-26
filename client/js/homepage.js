@@ -1,13 +1,14 @@
 
 
+
 function main() {
   const SidebarToggleButton = document.getElementById("sidebar-toggle")
   SidebarToggleButton.addEventListener("click", ToggleSidebar)
 
   const AddTaskPopupToggleButton = document.getElementById("popup-toggle")
   AddTaskPopupToggleButton.addEventListener("click", showPopup)
-}
 
+}
 
 function ToggleSidebar(){
   const sidebar = document.getElementById("sidebar")
@@ -46,23 +47,65 @@ function CreateListTask(Task){
   if (!deadline) deadline = "Unset"
   const taskElement = document.createElement("li");
   taskElement.id = id 
-  taskElement.addEventListener("click", () => console.log("hello world"))
-  taskElement.className=  "list-task"
-  taskElement.innerHTML = 
+  taskElement.className =  "list-task"
+
+  const overviewDiv = document.createElement("div")
+  overviewDiv.className = "overview-wrapper"
+  overviewDiv.addEventListener("click", () => ExpandListTask(taskElement.id))
+  overviewDiv.innerHTML = 
   `<span class="list-task-name">${name}</span>
    <span class="list-task-priority">${priority}</span>
    <span class="list-task-deadline">${deadline}</span>`
-  
+  taskElement.appendChild(overviewDiv)
+
+  const expandedItemDiv = document.createElement("div");
+  expandedItemDiv.className = "list-task-expand";
+
+  const taskDescription = document.createElement("div")           
+  taskDescription.className = "list-task-description"
+  taskDescription.innerHTML = Task.description;
+  expandedItemDiv.appendChild(taskDescription)
+
+  const subtaskListWrapperDiv = document.createElement("div")
+  subtaskListWrapperDiv.className = "subtask-list-wrapper"
+  subtaskListWrapperDiv.appendChild(CreateSubtaskList(Task.subtasks))
+  expandedItemDiv.appendChild(subtaskListWrapperDiv)
+  taskElement.appendChild(expandedItemDiv)
+  taskElement.appendChild(document.createElement("br"))
+
   const taskList = document.getElementById("main-task-list")
   taskList.appendChild(taskElement)
+
+
+
+}
+
+function CreateSubtaskList(Subtasks){
+  const SubtaskList = document.createElement("ul")
+  for (let subtask of Subtasks){
+    const id = subtask._id
+    const subtaskListItem = document.createElement("li")
+    subtaskListItem.className= "subtask"
+    subtaskListItem.id = id 
+    subtaskListItem.innerHTML = 
+    `<span class="subtask-name">${subtask.name}</span>
+    <span class="subtask-priority">${subtask.priority}</span>
+    <span class="subtask-deadline">${subtask.deadline || "Unset"}</span>`
+    SubtaskList.appendChild(subtaskListItem)
+  }
+  return SubtaskList
 }
 
 // test function 
-function change(id) {
-  const item = document.getElementById("change")
+function ExpandListTask(id) {
+  const item = document.getElementById(id)
   item.style.transitionDuration = "350ms"
-  if (item.style.height == "100%") item.style.height = "4rem"
-  else item.style.height = "100%"
+  item.style.animationDuration = "350ms"
+  if (item.style.height == "100%") return item.style.height = "4rem"
+  for (let task of document.getElementById("main-task-list").children)
+    // console.log(task)
+    task.style.height = "4rem"
+  item.style.height = "100%"
 }
 
 main()

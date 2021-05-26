@@ -9,7 +9,9 @@
   </head>
 
   <body>
-    <div class="add-task-popup" id="add-task-popup"></div>
+    <div class="add-task-popup" id="add-task-popup">
+      <input type="text" />
+    </div>
 
     <div class="header">
       <button id="sidebar-toggle">></button>
@@ -37,26 +39,12 @@
             "
             >Name</span
           >
-          <span style="width: 20%">Priority</span>
+          <span style="width: 20%">Priority</span>/
           <span style="width: 20%">Deadline</span>
         </div>
 
         <div class="main-task-list-wrapper">
-          <ul class="main-task-list" id="main-task-list">
-            <li class="list-task" id="change">
-              <span class="list-task-name">This is the task name</span>
-              <span class="list-task-priority">Urgent</span>
-              <span class="list-task-deadline">June 11, 2020</span>
-              <div class="list-task-description">Hello world</div>
-            </li>
-
-            <!-- <li class="list-task">
-              <span class="list-task-name">This is the task name</span>
-              <span class="list-task-priority">Urgent</span>
-              <span class="list-task-deadline">June 11, 2020</span>
-              <div class="list-task-description">Hello world</div>
-            </li> -->
-          </ul>
+          <ul class="main-task-list" id="main-task-list"></ul>
         </div>
       </div>
     </div>

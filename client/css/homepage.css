@@ -11,6 +11,10 @@
   margin: 0;
 }
 
+button:hover {
+  transform: scale(1.05, 1.05);
+}
+
 div {
   transition-duration: 250ms;
   animation-duration: 250ms;
@@ -72,7 +76,7 @@ button {
 }
 
 .sidebar {
-  height: 100%;
+  height: 120vh;
   width: 15%;
   background-color: var(--main-secondary);
   position: absolute;
@@ -108,7 +112,7 @@ li {
   flex-direction: column;
   background-color: var(--main-background);
   width: 100%;
-  height: 100vh;
+  height: 120vh;
   padding: 4rem;
 }
 
@@ -132,7 +136,16 @@ li {
 
 .main-task-list-wrapper {
   margin: 0 auto;
+  height: auto;
   width: 65%;
+  overflow: scroll;
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+  border: 1px solid black;
+  /* padding: 1rem; */
+}
+.main-task-list-wrapper::-webkit-scrollbar {
+  display: none;
 }
 
 .main-task-list {
@@ -141,13 +154,12 @@ li {
 }
 
 .list-task {
-  margin-top: 0.5rem;
-
+  margin: 1rem;
   transition-duration: 250ms;
   animation-duration: 250ms;
   height: 4rem;
   overflow: hidden;
-  display: flex;
+  /* display: flex; */
   flex-wrap: wrap;
   background-color: var(--main-secondary);
 }
@@ -158,33 +170,38 @@ li {
 .list-task:active {
   transform: scale(1.02, 1.01);
 }
-.list-task span {
+.list-task .overview-wrapper {
+  width: 100%;
+  height: 4rem;
+  display: flex;
+}
+
+.overview-wrapper span {
   justify-content: center;
   display: flex;
   align-items: center;
-  height: 4rem;
   font-size: 1rem;
 }
 
-.list-task .list-task-name {
+.list-task-name {
   width: 60%;
   justify-content: flex-start;
   padding-left: 2rem;
   font-size: 1.5rem;
 }
 
-.list-task .list-task-priority {
+.list-task-priority {
   width: 20%;
   background-color: red;
   font-weight: 600;
   color: var(--main-background);
 }
 
-.list-task .list-task-deadline {
+.list-task-deadline {
   width: 20%;
 }
 
-.list-task .list-task-description {
+.list-task-expand {
   padding: 2rem;
   padding-top: 1rem;
   /* display: none; */
@@ -206,4 +223,53 @@ li {
   transform: translate(50%, 20%);
   visibility: hidden;
   transition-duration: 100ms;
+}
+
+.list-task-expand {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.subtask {
+  display: flex;
+}
+.subtask span {
+  border: 1px solid black;
+}
+.subtask-list-wrapper {
+}
+
+.subtask-name {
+  width: 60%;
+}
+.subtask-priority {
+  width: 20%;
+}
+.subtask-deadline {
+  width: 20%;
+}
+/* .list-task-button-wrapper {
+  display: flex;
+  justify-content: center;
+}
+
+.list-task-button-wrapper button {
+  background-color: #648de5;
+  color: white;
+  height: 2rem;
+  width: 4rem;
+  border-radius: 6px;
+} */
+
+.list-task-expand {
+  border: 3px solid orange;
+}
+
+.list-task-description {
+  border: 2px solid green;
+}
+
+.overview-wrapper {
+  border: 1px solid black;
 }
