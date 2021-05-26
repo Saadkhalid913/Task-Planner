@@ -141,6 +141,10 @@ li {
 }
 
 .list-task {
+  margin-top: 0.5rem;
+
+  transition-duration: 250ms;
+  animation-duration: 250ms;
   height: 4rem;
   overflow: hidden;
   display: flex;
@@ -150,6 +154,9 @@ li {
 
 .list-task:hover {
   transform: scale(1.03, 1.03);
+}
+.list-task:active {
+  transform: scale(1.02, 1.01);
 }
 .list-task span {
   justify-content: center;
@@ -198,5 +205,5 @@ li {
   right: 50%;
   transform: translate(50%, 20%);
   visibility: hidden;
-  transition-duration: 250ms;
+  transition-duration: 100ms;
 }

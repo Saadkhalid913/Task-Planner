@@ -1,6 +1,11 @@
+
+
 function main() {
   const SidebarToggleButton = document.getElementById("sidebar-toggle")
   SidebarToggleButton.addEventListener("click", ToggleSidebar)
+
+  const AddTaskPopupToggleButton = document.getElementById("popup-toggle")
+  AddTaskPopupToggleButton.addEventListener("click", showPopup)
 }
 
 
@@ -22,17 +27,34 @@ function AddNewCatigoryToSidebar(Category) {
 
 function showPopup() {
   const popup = document.getElementById("add-task-popup");
-  popup.style.transitionDuration = "250ms"
-  if (popup.style.visibility == "hidden") {
+  console.log(popup.style.visibility)
+  if (popup.style.visibility == "hidden" || !popup.style.visibility) {
     popup.style.height = "75vh";
     popup.style.visibility = "visible";
     return
   }
   else {
-    popup.style.visibility = "hidden";
     popup.style.height = "0vh";
+    popup.style.visibility = "hidden";
     return
   }
+}
+
+
+function CreateListTask(Task){
+  let { name, description,  priority, deadline, category, subtasks, link,  _id: id} = Task
+  if (!deadline) deadline = "Unset"
+  const taskElement = document.createElement("li");
+  taskElement.id = id 
+  taskElement.addEventListener("click", () => console.log("hello world"))
+  taskElement.className=  "list-task"
+  taskElement.innerHTML = 
+  `<span class="list-task-name">${name}</span>
+   <span class="list-task-priority">${priority}</span>
+   <span class="list-task-deadline">${deadline}</span>`
+  
+  const taskList = document.getElementById("main-task-list")
+  taskList.appendChild(taskElement)
 }
 
 // test function 
