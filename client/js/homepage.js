@@ -1,5 +1,14 @@
+const GREEN = "#00A878"
+const YELLOW = "#FFE066"
+const RED = "#EF233C"
 
-
+const PRIORITY_HASH = {
+  "low": GREEN,
+  "medium": YELLOW,
+  "high": RED,
+  "urgent": RED,
+  "undecided": "#000000"
+}
 
 function main() {
   const SidebarToggleButton = document.getElementById("sidebar-toggle")
@@ -7,12 +16,30 @@ function main() {
 
   const AddTaskPopupToggleButton = document.getElementById("popup-toggle")
   AddTaskPopupToggleButton.addEventListener("click", showPopup)
+  AddCategories()
+  GetTasks()
+}
 
+async function AddCategories() {
+  const response = await fetch("http://localhost:3000/api/categories")
+  const Categories = await response.json() 
+  for (let category of Categories) {
+    const target = window.location + `?filter=${category._id}`
+    const CategoryElement =  `<a href = ${target} class="sidebar-category"><li>${category.name}</li></a>`
+    document.getElementById("sidebar-list").innerHTML+=CategoryElement
+  }
+  }
+
+async function GetTasks() {
+  const response = await fetch("http://localhost:3000/api/tasks")
+  const tasks = await response.json()
+  for (let task of tasks)
+    CreateListTask(task);
 }
 
 function ToggleSidebar(){
   const sidebar = document.getElementById("sidebar")
-  if (sidebar.style.left == "0%") sidebar.style.left = "-15%"
+  if (sidebar.style.left == "0%" || !sidebar.style.left) sidebar.style.left = "-15%"
   else  sidebar.style.left = "0%"
 }
 
@@ -43,7 +70,7 @@ function showPopup() {
 
 
 function CreateListTask(Task){
-  let { name, description,  priority, deadline, category, subtasks, link,  _id: id} = Task
+  let { name, description, priority, deadline, category, subtasks, link,  _id: id} = Task
   if (!deadline) deadline = "Unset"
   const taskElement = document.createElement("li");
   taskElement.id = id 
@@ -52,9 +79,11 @@ function CreateListTask(Task){
   const overviewDiv = document.createElement("div")
   overviewDiv.className = "overview-wrapper"
   overviewDiv.addEventListener("click", () => ExpandListTask(taskElement.id))
+  const priorityColor = PRIORITY_HASH[priority]
   overviewDiv.innerHTML = 
   `<span class="list-task-name">${name}</span>
-   <span class="list-task-priority">${priority}</span>
+   <span class="list-task-priority" style="background-color: ${priorityColor}">${priority}</span>
+   <span class="list-task-category">${category}</span>
    <span class="list-task-deadline">${deadline}</span>`
   taskElement.appendChild(overviewDiv)
 
@@ -99,13 +128,16 @@ function CreateSubtaskList(Subtasks){
 // test function 
 function ExpandListTask(id) {
   const item = document.getElementById(id)
-  item.style.transitionDuration = "350ms"
-  item.style.animationDuration = "350ms"
-  if (item.style.height == "100%") return item.style.height = "4rem"
+  const maximumHeight = item.scrollHeight
+  item.style.transitionDuration = "250ms"
+  item.style.animationDuration = "250ms"
+  console.log(item.style.maxHeight)
+  if (item.style.height == `${maximumHeight}px`) return item.style.height= "4rem"
   for (let task of document.getElementById("main-task-list").children)
     // console.log(task)
     task.style.height = "4rem"
-  item.style.height = "100%"
+  item.style.height = `${maximumHeight}px`
+  console.log(item.style.height)
 }
 
 main()

@@ -12,7 +12,6 @@ router.get("/", async(req,res) =>{
 router.post("/", async (req,res) => {
   const body = req.body
   const NewCategory = new CategoryModel(body)
-
   const result = await NewCategory.save().catch(err => res.send(err))
   if (!result) return
   return res.send(result)
