@@ -1,12 +1,13 @@
 const GREEN = "#00A878"
 const YELLOW = "#FFE066"
 const RED = "#EF233C"
+const URGENT_RED = "#970012"
 
 const PRIORITY_HASH = {
   "low": GREEN,
   "medium": YELLOW,
   "high": RED,
-  "urgent": RED,
+  "urgent": URGENT_RED,
   "undecided": "#000000"
 }
 

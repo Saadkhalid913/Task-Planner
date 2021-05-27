@@ -25,13 +25,49 @@
           id="task-desc-box"
           cols="30"
           name="add-task-desc"
-          rows="6"
+          rows="4"
           placeholder="Task description"
         ></textarea>
       </div>
+      <div id="task-datetime">
+        <div>
+          <label for="task-priority">Priority</label>
+          <select
+            id="add-task-priority"
+            name="task-priority"
+            id="add-task-priority"
+          >
+            <option style="background-color: #00a878" value="low">Low</option>
+            <option style="background-color: #ffe066" value="medium">
+              Medium
+            </option>
+            <option style="background-color: #ef233c" value="high">High</option>
+            <option style="background-color: #970012" value="urgent">
+              Urgent
+            </option>
+            <option
+              style="background-color: #000000; color: white"
+              value="undecided"
+            >
+              Undecided
+            </option>
+          </select>
+        </div>
+
+        <div>
+          <label for="new-task-deadline">Deadline</label>
+          <input id="new-task-deadline" type="datetime-local" />
+        </div>
+      </div>
+
       <div>
-        <label for="new-task-deadline">Deadline</label>
-        <input id="new-task-deadline" type="datetime-local" />
+        <label for="add-task-link">Link</label>
+        <input
+          type="text"
+          name="add-task-link"
+          id="add-task-link"
+          placeholder="www.example.com/task"
+        />
       </div>
 
       <div id="popup-buttons">
