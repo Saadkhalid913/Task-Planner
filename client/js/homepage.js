@@ -62,17 +62,21 @@ function AddNewCatigoryToSidebar(Category) {
   SidebarList.prepend(NewCategory);
 }
 
+
+// re-write function 
 function showPopup() {
   const popup = document.getElementById("add-task-popup");
   console.log(popup.style.visibility)
   if (popup.style.visibility == "hidden" || !popup.style.visibility) {
     popup.style.height = "75vh";
+    document.getElementById("task-desc-box").style.visibility="visible"
     popup.style.visibility = "visible";
     return
   }
   else {
-    popup.style.height = "0vh";
+    document.getElementById("task-desc-box").style.visibility="hidden"
     popup.style.visibility = "hidden";
+    popup.style.height = "0vh";
     return
   }
 }
