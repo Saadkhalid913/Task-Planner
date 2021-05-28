@@ -39,6 +39,8 @@ button {
   justify-content: space-between;
 }
 
+/* HEADER STYLES */
+
 #popup-toggle {
   position: relative;
   margin-right: 2rem;
@@ -76,11 +78,14 @@ button {
   display: flex;
 }
 
-#toggle-category-add-box {
-  color: black;
-  background-color: var(--main-secondary);
+#category-add-wrapper {
+  display: flex;
+  align-items: center;
+  flex-direction: row;
+  margin-bottom: 1.5rem;
 }
 
+/* SIDEBAR STYLES */
 .sidebar {
   height: 120vh;
   width: 15%;
@@ -91,13 +96,6 @@ button {
   flex-direction: column;
   align-items: flex-start;
   padding: 1.5rem;
-}
-
-#category-add-wrapper {
-  display: flex;
-  align-items: center;
-  flex-direction: row;
-  margin-bottom: 1.5rem;
 }
 
 #category-add-input {
@@ -224,6 +222,7 @@ li {
   display: flex;
   align-items: center;
   font-size: 1rem;
+  text-transform: capitalize;
 }
 
 .list-task-name {
@@ -235,7 +234,7 @@ li {
 
 .list-task-priority {
   width: 15%;
-  color: var(--main-black-tone);
+  color: white;
   font-weight: 600;
 }
 .list-task-deadline {
@@ -245,6 +244,10 @@ li {
 }
 .list-task-category {
   width: 15%;
+  display: flex;
+  align-items: center;
+  text-align: center;
+  padding: 0.5rem;
 }
 
 .list-task-expand {
@@ -258,6 +261,7 @@ li {
 }
 
 /* popup add task */
+
 .add-task-popup {
   height: 0vh;
   width: 60vw;
@@ -272,7 +276,7 @@ li {
   flex-direction: column;
   transform: translate(50%, 20%);
   visibility: hidden;
-  transition-duration: 100ms;
+  transition-duration: 150ms;
   justify-content: space-between;
   overflow: hidden;
 }
@@ -282,10 +286,6 @@ li {
   flex-direction: column;
   width: 100%;
   justify-content: space-between;
-}
-
-.add-task-popup > * {
-  /* border: 3px solid white; */
 }
 
 #task-datetime {

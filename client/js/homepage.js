@@ -1,5 +1,4 @@
 
-
 const TOTAL_TASKS = {}
 
 const GREEN = "#00A878"
@@ -28,7 +27,7 @@ function TaskSubmitButton() {
 
 function main() {
   // adding all tasks
-  const filter = new URLSearchParams(window.location.search).get("filter")
+  const filter = new URLSearchParams(window.location.search).get("filter").replaceAll("-", " ")
   try {
     GetTasks(filter)
     AddCategories()
@@ -71,16 +70,17 @@ async function AddCategories() {
   const popupSelect =  document.getElementById("add-task-category-input")  
   
   sidebarList.innerHTML = ` <a href="./homepage.html?filter=all" class="sidebar-category"><li>All Tasks</li></a>`
-  popupSelect.innerHTML = ""
+  popupSelect.innerHTML = `<option value="none">None</option>`
 
 
   if (!response) return
   const Categories = await response.json() 
   for (let category of Categories) {
-    const target =  window.location.href.split('?')[0] + `?filter=${category.name}`
+    const URLtarget = category.name.replaceAll(" ", "-")
+    const target =  window.location.href.split('?')[0] + `?filter=${URLtarget}`
     const CategoryElement =  `<a href = ${target} class="sidebar-category"><li>${category.name}</li></a>`
     sidebarList.innerHTML +=CategoryElement
-    popupSelect.innerHTML += `<option class = "task-add-category-option" value = ${category.name}>${category.name}<select/>`
+    popupSelect.innerHTML += `<option class = "task-add-category-option" value = "${category.name}">${category.name}<select/>`
   }
   }
 
@@ -141,14 +141,16 @@ function showPopup() {
   const popup = document.getElementById("add-task-popup");
   if (popup.style.visibility == "hidden" || !popup.style.visibility) {
     popup.style.height = "75vh";
-    document.getElementById("task-desc-box").style.visibility="visible"
     popup.style.visibility = "visible";
+    for (let item of popup.children)
+      item.style.display = "flex"
     return
   }
   else {
-    document.getElementById("task-desc-box").style.visibility="hidden"
-    popup.style.visibility = "hidden";
+    for (let item of popup.children) 
+      item.style.display = "none"
     popup.style.height = "0vh";
+    popup.style.visibility = "hidden";
     return
   }
 }
@@ -157,7 +159,8 @@ function showPopup() {
 function CreateListTask(Task){
   let { name, description, priority, category, subtasks, link,  _id: id} = Task
   TOTAL_TASKS[id] = Task
-  const TimeUntilDeadline = CalculateDeadlineDelta(Task)
+  let TimeUntilDeadline = CalculateDeadlineDelta(Task)
+  if (!TimeUntilDeadline) TimeUntilDeadline = "Overdue"
   
   // task element init 
   const taskElement = document.createElement("li");
@@ -168,7 +171,7 @@ function CreateListTask(Task){
   const overviewDiv = document.createElement("div")
   overviewDiv.className = "overview-wrapper"
   overviewDiv.addEventListener("click", () => ExpandListTask(taskElement.id))
-  const priorityColor = PRIORITY_HASH[priority]
+  const priorityColor = PRIORITY_HASH[priority] 
   overviewDiv.innerHTML = 
   `<span class="list-task-name">${name}</span>
    <span class="list-task-priority" style="background-color: ${priorityColor}">${priority}</span>
@@ -249,8 +252,9 @@ async function PopupToJSON() {
     priority: priorityInput.value,
     link: linkInput.value,
     deadline:deadlineInput.value,
-    // category: categoryInput.value
+    category: categoryInput.value
   }
+  console.log(categoryInput.value)
   const response = await fetch("http://localhost:3000/api/tasks", {
     method:"POST",
     mode:"cors",
@@ -278,15 +282,17 @@ function CalculateDeadlineDelta(task) {
   const deadlineDate = Date.parse(task.deadline);
   const currentTime = new Date()
   const timeDelta = deadlineDate - currentTime 
-
+  
+  if (timeDelta < 1) return ""
+  
   const days = Math.floor(timeDelta / millisecondsInDay)
   const leftoverMillisecondsDay = timeDelta % millisecondsInDay
-
+  
   const hours = Math.floor(leftoverMillisecondsDay / millisecondsInHour)
   const leftoverMillisecondsHour = leftoverMillisecondsDay % millisecondsInHour
-
+  
   const minutes = Math.floor(leftoverMillisecondsHour / millisecondsInMinute)
-
+  
   const formattedTimeDelta = `${days}d ${hours}h ${minutes}m`
   return formattedTimeDelta
 }
