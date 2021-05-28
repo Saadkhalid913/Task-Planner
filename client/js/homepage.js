@@ -11,6 +11,15 @@ const PRIORITY_HASH = {
   "undecided": "#000000"
 }
 
+function TaskSubmitButton() {
+  PopupToJSON()
+  for (let item of document.getElementById("add-task-popup").children) {
+    console.log(item)
+    item.value = ""
+  }
+  // showPopup()
+}
+
 function main() {
   const SidebarToggleButton = document.getElementById("sidebar-toggle")
   SidebarToggleButton.addEventListener("click", ToggleSidebar)
@@ -26,14 +35,13 @@ try {
 }
 catch(e) {Notification("Network error")}
   document.getElementById("popup-cancel").addEventListener("click", showPopup)
-  document.getElementById("popup-add").addEventListener("click", PopupToJSON)
+  document.getElementById("popup-add").addEventListener("click", TaskSubmitButton)
 
   document.getElementById("add-category-button").addEventListener("click", CategoryAddFromInput)
 
 }
 
 async function Notification(message){
-  console.log(message)
   const notification = document.getElementById("notification")
   notification.style.visibility = "visible"
   notification.style.height = "8rem"
@@ -193,13 +201,13 @@ function ExpandListTask(id) {
   item.style.height = `${maximumHeight}px`
 }
 
-function PopupToJSON() {
+async function PopupToJSON() {
   const nameInput = document.getElementById("task-name-input")
   const descInput = document.getElementById("task-desc-box")
   const priorityInput = document.getElementById("add-task-priority")
   const deadlineInput = document.getElementById("new-task-deadline")
   const linkInput = document.getElementById("add-task-link")
-  // const categoryInput = document.getElementById("add-task-category-input")
+  const categoryInput = document.getElementById("add-task-category-input")
 
   if (!nameInput.value || !descInput.value) return // input validation 
 
@@ -211,7 +219,13 @@ function PopupToJSON() {
     deadline:deadlineInput.value,
     // category: categoryInput.value
   }
-
-  const response = await fetch("http://localhost:3000/api/tasks")
+  const response = await fetch("http://localhost:3000/api/tasks", {
+    method:"POST",
+    mode:"cors",
+    headers:{"Content-Type": "application/json"},
+    body: JSON.stringify(task)
+  })
+  const responseTask = await response.json()
+  CreateListTask(responseTask)
 }
 main()
