@@ -17,15 +17,39 @@ function main() {
 
   const AddTaskPopupToggleButton = document.getElementById("popup-toggle")
   AddTaskPopupToggleButton.addEventListener("click", showPopup)
+  
+  const filter = new URLSearchParams(window.location.search).get("filter")
+try {
+  GetTasks(filter)
   AddCategories()
 
-  const filter = new URLSearchParams(window.location.search).get("filter")
-  console.log(filter)
-  GetTasks(filter)
+}
+catch(e) {Notification("Network error")}
+  document.getElementById("popup-cancel").addEventListener("click", showPopup)
+  document.getElementById("popup-add").addEventListener("click", PopupToJSON)
+
+  document.getElementById("add-category-button").addEventListener("click", CategoryAddFromInput)
+
+}
+
+async function Notification(message){
+  console.log(message)
+  const notification = document.getElementById("notification")
+  notification.style.visibility = "visible"
+  notification.style.height = "8rem"
+  notification.childNodes[3].innerHTML = message 
+  
+  await setTimeout(() => {
+    notification.style.height = "0px"
+    notification.style.visibility = "hidden"
+    notification.childNodes[3].innerHTML  = "" 
+  }, 4000);
 }
 
 async function AddCategories() {
-  const response = await fetch("http://localhost:3000/api/categories")
+  const response = await fetch("http://localhost:3000/api/categories").catch(err => Notification("Could not connect to server"))
+  document.getElementById("sidebar-list").innerHTML = ` <a href="./homepage.html?filter=all" class="sidebar-category"><li>All Tasks</li></a>`
+  if (!response) return
   const Categories = await response.json() 
   for (let category of Categories) {
     const target =  window.location.href.split('?')[0] + `?filter=${category.name}`
@@ -34,8 +58,30 @@ async function AddCategories() {
   }
   }
 
+function CategoryAddFromInput(){
+  const textbox = document.getElementById("category-add-input")
+  if (!textbox.value) return 
+  AddCategory(textbox.value)
+  textbox.value = ""
+}
+
+async function AddCategory(category) {
+  const response = await fetch("http://localhost:3000/api/categories", {
+    method: "POST",
+    mode:"cors",
+    headers: {
+      "Content-type": "application/json"
+    },
+    body: JSON.stringify({name:category})
+  })
+  const responseJSON = await response.json()
+  AddCategories()
+} 
+
+
 async function GetTasks(filter) {
-  const response = await fetch("http://localhost:3000/api/tasks")
+  const response = await fetch("http://localhost:3000/api/tasks").catch(err => Notification("Could not fetch tasks"))
+  if (!response) return
   const tasks = await response.json()
   for (let task of tasks){
   if (filter == "all" || (!filter))
@@ -67,7 +113,6 @@ function AddNewCatigoryToSidebar(Category) {
 // re-write function 
 function showPopup() {
   const popup = document.getElementById("add-task-popup");
-  console.log(popup.style.visibility)
   if (popup.style.visibility == "hidden" || !popup.style.visibility) {
     popup.style.height = "75vh";
     document.getElementById("task-desc-box").style.visibility="visible"
@@ -142,13 +187,31 @@ function ExpandListTask(id) {
   const maximumHeight = item.scrollHeight
   item.style.transitionDuration = "250ms"
   item.style.animationDuration = "250ms"
-  console.log(item.style.maxHeight)
   if (item.style.height == `${maximumHeight}px`) return item.style.height= "4rem"
   for (let task of document.getElementById("main-task-list").children)
-    // console.log(task)
     task.style.height = "4rem"
   item.style.height = `${maximumHeight}px`
-  console.log(item.style.height)
 }
 
+function PopupToJSON() {
+  const nameInput = document.getElementById("task-name-input")
+  const descInput = document.getElementById("task-desc-box")
+  const priorityInput = document.getElementById("add-task-priority")
+  const deadlineInput = document.getElementById("new-task-deadline")
+  const linkInput = document.getElementById("add-task-link")
+  // const categoryInput = document.getElementById("add-task-category-input")
+
+  if (!nameInput.value || !descInput.value) return // input validation 
+
+  const task = {
+    name: nameInput.value,
+    description: descInput.value,
+    priority: priorityInput.value,
+    link: linkInput.value,
+    deadline:deadlineInput.value,
+    // category: categoryInput.value
+  }
+
+  const response = await fetch("http://localhost:3000/api/tasks")
+}
 main()

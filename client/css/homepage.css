@@ -76,6 +76,11 @@ button {
   display: flex;
 }
 
+#toggle-category-add-box {
+  color: black;
+  background-color: var(--main-secondary);
+}
+
 .sidebar {
   height: 120vh;
   width: 15%;
@@ -86,6 +91,33 @@ button {
   flex-direction: column;
   align-items: flex-start;
   padding: 1.5rem;
+}
+
+#category-add-wrapper {
+  display: flex;
+  align-items: center;
+  flex-direction: row;
+  margin-bottom: 1.5rem;
+}
+
+#category-add-input {
+  outline: none;
+  padding: 0.5rem;
+
+  border: none;
+  background-color: transparent;
+  margin-right: 0.25rem;
+  height: 2rem;
+  width: 75%;
+  border: 2px solid var(--main-tertiary);
+}
+
+#add-category-button {
+  height: 2rem;
+  width: 20%;
+  background-color: var(--main-secondary);
+  font-size: 2rem;
+  margin-right: 5%;
 }
 
 .sidebar p {
@@ -249,6 +281,10 @@ li {
   justify-content: space-between;
 }
 
+#new-task-deadline {
+  padding: 0.5rem;
+}
+
 #task-datetime > div {
   width: min-content;
   display: flex;
@@ -267,6 +303,7 @@ li {
   height: 2.5rem;
   font-size: 1.25rem;
 }
+
 #add-task-priority > option {
   font-size: 1.25rem;
 }
@@ -337,9 +374,23 @@ li {
 .list-task-expand {
   background-color: var(--main-tertiary);
 }
-/* 
-.list-task-description {
-}
 
-.overview-wrapper {
-} */
+.notification {
+  position: fixed;
+  display: flex;
+  flex-direction: column;
+  width: min(50%, 15rem);
+  margin: 0 auto;
+  background-color: var(--main-tertiary);
+  right: 10%;
+  bottom: 7.5%;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen,
+    Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+  padding: 1rem;
+  border-top: 0.5rem solid red;
+  transform: translate(50%, 20%);
+  visibility: hidden;
+  overflow: hidden;
+  height: 0px;
+  transition-duration: 400ms;
+}

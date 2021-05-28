@@ -12,7 +12,7 @@ const subtask = require("./api/Schemas/Schemas").SubTaskModel
 const app = express()
 
 app.use(express.json())
-app.use(cors())
+app.use(cors({origin: "*"}))
 app.use("/api/tasks", TaskRouter) // add validation to all routes 
 app.use("/api/categories", CategoryRouter) // add validation to schemas 
 
