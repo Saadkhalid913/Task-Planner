@@ -1,3 +1,7 @@
+
+
+const TOTAL_TASKS = {}
+
 const GREEN = "#00A878"
 const YELLOW = "#FFE066"
 const RED = "#EF233C"
@@ -11,37 +15,44 @@ const PRIORITY_HASH = {
   "undecided": "#000000"
 }
 
+
 function TaskSubmitButton() {
+  // function for submitting task 
+  // submits task to database and adds to screen 
   PopupToJSON()
   for (let item of document.getElementById("add-task-popup").children) {
-    console.log(item)
     item.value = ""
   }
-  // showPopup()
+  showPopup()
 }
 
 function main() {
+  // adding all tasks
+  const filter = new URLSearchParams(window.location.search).get("filter")
+  try {
+    GetTasks(filter)
+    AddCategories()
+  }
+  catch(e) {
+    Notification("Network error")
+  }
+
+
+  // event listeners 
   const SidebarToggleButton = document.getElementById("sidebar-toggle")
   SidebarToggleButton.addEventListener("click", ToggleSidebar)
 
   const AddTaskPopupToggleButton = document.getElementById("popup-toggle")
   AddTaskPopupToggleButton.addEventListener("click", showPopup)
   
-  const filter = new URLSearchParams(window.location.search).get("filter")
-try {
-  GetTasks(filter)
-  AddCategories()
 
-}
-catch(e) {Notification("Network error")}
   document.getElementById("popup-cancel").addEventListener("click", showPopup)
   document.getElementById("popup-add").addEventListener("click", TaskSubmitButton)
-
   document.getElementById("add-category-button").addEventListener("click", CategoryAddFromInput)
-
 }
 
 async function Notification(message){
+  // sends notification to user for 4 seconds 
   const notification = document.getElementById("notification")
   notification.style.visibility = "visible"
   notification.style.height = "8rem"
@@ -56,13 +67,20 @@ async function Notification(message){
 
 async function AddCategories() {
   const response = await fetch("http://localhost:3000/api/categories").catch(err => Notification("Could not connect to server"))
-  document.getElementById("sidebar-list").innerHTML = ` <a href="./homepage.html?filter=all" class="sidebar-category"><li>All Tasks</li></a>`
+  const sidebarList =document.getElementById("sidebar-list")
+  const popupSelect =  document.getElementById("add-task-category-input")  
+  
+  sidebarList.innerHTML = ` <a href="./homepage.html?filter=all" class="sidebar-category"><li>All Tasks</li></a>`
+  popupSelect.innerHTML = ""
+
+
   if (!response) return
   const Categories = await response.json() 
   for (let category of Categories) {
     const target =  window.location.href.split('?')[0] + `?filter=${category.name}`
     const CategoryElement =  `<a href = ${target} class="sidebar-category"><li>${category.name}</li></a>`
-    document.getElementById("sidebar-list").innerHTML+=CategoryElement
+    sidebarList.innerHTML +=CategoryElement
+    popupSelect.innerHTML += `<option class = "task-add-category-option" value = ${category.name}>${category.name}<select/>`
   }
   }
 
@@ -137,12 +155,16 @@ function showPopup() {
 
 
 function CreateListTask(Task){
-  let { name, description, priority, deadline, category, subtasks, link,  _id: id} = Task
-  if (!deadline) deadline = "Unset"
+  let { name, description, priority, category, subtasks, link,  _id: id} = Task
+  TOTAL_TASKS[id] = Task
+  const TimeUntilDeadline = CalculateDeadlineDelta(Task)
+  
+  // task element init 
   const taskElement = document.createElement("li");
   taskElement.id = id 
   taskElement.className =  "list-task"
 
+  // Unexpanded overview div init 
   const overviewDiv = document.createElement("div")
   overviewDiv.className = "overview-wrapper"
   overviewDiv.addEventListener("click", () => ExpandListTask(taskElement.id))
@@ -151,23 +173,32 @@ function CreateListTask(Task){
   `<span class="list-task-name">${name}</span>
    <span class="list-task-priority" style="background-color: ${priorityColor}">${priority}</span>
    <span class="list-task-category">${category}</span>
-   <span class="list-task-deadline">${deadline}</span>`
-  taskElement.appendChild(overviewDiv)
+   <span class="list-task-deadline">${TimeUntilDeadline}</span>`
 
-  const expandedItemDiv = document.createElement("div");
-  expandedItemDiv.className = "list-task-expand";
+  taskElement.appendChild(overviewDiv) // adding div to task element 
 
-  const taskDescription = document.createElement("div")           
+
+  // expanded div HTML 
+  const expandedItemDiv = document.createElement("div"); 
+  expandedItemDiv.className = "list-task-expand"; 
+
+
+  // description 
+  const taskDescription = document.createElement("div") 
   taskDescription.className = "list-task-description"
   taskDescription.innerHTML = Task.description;
   expandedItemDiv.appendChild(taskDescription)
 
+  // subtasks array 
   const subtaskListWrapperDiv = document.createElement("div")
   subtaskListWrapperDiv.className = "subtask-list-wrapper"
   subtaskListWrapperDiv.appendChild(CreateSubtaskList(Task.subtasks))
   expandedItemDiv.appendChild(subtaskListWrapperDiv)
+  
+  //adding description and subtask div into the expanded div
   taskElement.appendChild(expandedItemDiv)
   taskElement.appendChild(document.createElement("br"))
+
 
   const taskList = document.getElementById("main-task-list")
   taskList.appendChild(taskElement)
@@ -191,6 +222,7 @@ function CreateSubtaskList(Subtasks){
 
 // test function 
 function ExpandListTask(id) {
+  CalculateDeadlineDelta(TOTAL_TASKS[id])
   const item = document.getElementById(id)
   const maximumHeight = item.scrollHeight
   item.style.transitionDuration = "250ms"
@@ -225,7 +257,38 @@ async function PopupToJSON() {
     headers:{"Content-Type": "application/json"},
     body: JSON.stringify(task)
   })
+  if (!(response.status == 200)) {
+    Notification("Could not upload task")
+    return
+  }
   const responseTask = await response.json()
   CreateListTask(responseTask)
 }
+
+function CalculateDeadlineDelta(task) {
+  // returns String 
+
+  if (!task.deadline) return "Unset"
+
+  // time calculation constants 
+  const millisecondsInMinute = 60000
+  const millisecondsInHour = millisecondsInMinute * 60
+  const millisecondsInDay = millisecondsInHour * 24
+
+  const deadlineDate = Date.parse(task.deadline);
+  const currentTime = new Date()
+  const timeDelta = deadlineDate - currentTime 
+
+  const days = Math.floor(timeDelta / millisecondsInDay)
+  const leftoverMillisecondsDay = timeDelta % millisecondsInDay
+
+  const hours = Math.floor(leftoverMillisecondsDay / millisecondsInHour)
+  const leftoverMillisecondsHour = leftoverMillisecondsDay % millisecondsInHour
+
+  const minutes = Math.floor(leftoverMillisecondsHour / millisecondsInMinute)
+
+  const formattedTimeDelta = `${days}d ${hours}h ${minutes}m`
+  return formattedTimeDelta
+}
+
 main()

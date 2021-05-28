@@ -120,6 +120,15 @@ button {
   margin-right: 5%;
 }
 
+.task-add-category-option {
+  text-transform: capitalize;
+}
+
+#add-task-category-input {
+  text-transform: capitalize;
+  height: 2rem;
+}
+
 .sidebar p {
   font-weight: 700;
   font-size: 1.5rem;
@@ -226,8 +235,8 @@ li {
 
 .list-task-priority {
   width: 15%;
+  color: var(--main-black-tone);
   font-weight: 600;
-  color: var(--main-background);
 }
 .list-task-deadline {
   width: 15%;
@@ -258,7 +267,7 @@ li {
   opacity: 0.95;
   margin: 0 auto;
   right: 50%;
-  padding: 2rem;
+  padding: 1rem;
   display: flex;
   flex-direction: column;
   transform: translate(50%, 20%);
@@ -273,6 +282,10 @@ li {
   flex-direction: column;
   width: 100%;
   justify-content: space-between;
+}
+
+.add-task-popup > * {
+  /* border: 3px solid white; */
 }
 
 #task-datetime {
@@ -326,7 +339,7 @@ li {
 }
 
 #add-task-link {
-  padding: 0.5rem;
+  padding: 0.25rem;
 }
 
 #popup-buttons > button {
@@ -350,6 +363,11 @@ li {
   width: 100%;
   display: flex;
   flex-direction: column;
+}
+
+.list-task-description {
+  white-space: pre-wrap;
+  overflow-wrap: break-word;
 }
 
 .subtask {

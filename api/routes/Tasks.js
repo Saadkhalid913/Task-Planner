@@ -18,7 +18,7 @@ router.post("/", async (req, res) => {
   const body = req.body
   const newTask = new TaskModel(body)
   console.log(newTask)
-  const response = await newTask.save().catch(err => res.send(err))
+  const response = await newTask.save().catch(err => res.status(400).send(err))
   res.send(response)
 })
 
@@ -33,7 +33,7 @@ router.post("/subtasks/:id", async (req, res) => {
     res.send(response)
   }
   catch(err) {
-    res.send(err.errors)
+    res.status(400).send(err.errors)
   }
 })
 
