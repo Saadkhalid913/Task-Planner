@@ -31,6 +31,7 @@ router.post("/subtasks/:id", async (req, res) => {
   try{
     const response = await Task.save()
     res.send(response)
+    console.log(response)
   }
   catch(err) {
     res.status(400).send(err.errors)

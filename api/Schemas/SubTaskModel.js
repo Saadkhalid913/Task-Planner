@@ -4,7 +4,7 @@ const Joi = require("joi")
 const SubTaskSchema = new mongoose.Schema({
   name: {type: String, minlength: 3, maxlength: 255, required: true},
   priority: {type: String, enum:["low", "medium", "high", "urgent", "undecided"], default: "undecided", lowercase: true},
-  Deadline: {type: Date, required: false},
+  deadline: {type: Date, required: false},
   Completed: Boolean
 })
 

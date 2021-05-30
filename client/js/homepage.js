@@ -313,7 +313,7 @@ function CalculateDeadlineDelta(task) {
   const currentTime = new Date()
   const timeDelta = deadlineDate - currentTime 
   
-  if (timeDelta < 1) return ""
+  if (timeDelta < 1) return "Overdue"
   
   const days = Math.floor(timeDelta / millisecondsInDay)
   const leftoverMillisecondsDay = timeDelta % millisecondsInDay
@@ -333,7 +333,6 @@ function SubmitSubtaskFromPopup() {
   const priorityBox = document.getElementById("add-subtask-priority-popup")
 
   if (!nameBox.value) return Notification("Please add a name")
-
   const Subtask = {
     name: nameBox.value,
     deadline: deadlineBox.value,
@@ -348,7 +347,8 @@ function SubmitSubtaskFromPopup() {
 }
 
 async function AddSubtask(id, subtask) {
-  const response =await fetch("http://localhost:3000/api/tasks/subtasks/" + id, {
+  // uploads a subtask to server, and also adds task to the document
+  const response = await fetch("http://localhost:3000/api/tasks/subtasks/" + id, {
     method:"POST",
     mode: "cors",
     headers: {"Content-Type": "application/json"},
@@ -356,8 +356,9 @@ async function AddSubtask(id, subtask) {
   })
 
   const subtaskResponse = await response.json()
+
   document.getElementById("subtask-list-"+ CurrentTaskId).appendChild(
-    CreateSubtaskItem(subtaskResponse.subtasks.find(task => task.name = subtask.name))
+    CreateSubtaskItem(subtaskResponse.subtasks.find(task => task.name == subtask.name))
   )
 
 }
