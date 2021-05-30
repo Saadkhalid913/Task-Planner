@@ -206,25 +206,22 @@ function CreateListTask(Task){
   
   expandedItemDiv.appendChild(subtaskListWrapperDiv)
   
+  // subtask button 
   const AddSubtaskButton = document.createElement("button")
   AddSubtaskButton.innerHTML = "Add Subtask"
   AddSubtaskButton.className = "task-add-subtask-button"
   AddSubtaskButton.addEventListener("click", () => {
     CurrentTaskId = id
-
     ToggleSubtaskPopup()
-    
   })  
   expandedItemDiv.appendChild(AddSubtaskButton)
-  
-  const popup = document.getElementById("subtask-popup");
-  
   
   //adding description and subtask div into the expanded div
   taskElement.appendChild(expandedItemDiv)
   taskElement.appendChild(document.createElement("br"))
   
   
+
   const taskList = document.getElementById("main-task-list")
   taskList.appendChild(taskElement)
   AddAllSubtasks(Task)
@@ -367,12 +364,17 @@ function ToggleSubtaskPopup() {
   const popup = document.getElementById("subtask-popup");
 
   if (popup.style.visibility == "hidden" || !popup.style.visibility) {
-    popup.style.visibility = "visible"
+    for (let item of popup.children)
+    item.style.display = "flex"
+    popup.style.visibility = "visible" 
     popup.style.height = "35%"
     return
   }
-  popup.style.visibility = "hidden"
   popup.style.height = "0vh"
+  for (let item of popup.children)
+      item.style.display = "none"
+
+  popup.style.visibility = "hidden"
 }
 
 

@@ -17,7 +17,6 @@ router.post("/", async (req, res) => {
   // add validation and add joi function  
   const body = req.body
   const newTask = new TaskModel(body)
-  console.log(newTask)
   const response = await newTask.save().catch(err => res.status(400).send(err))
   res.send(response)
 })
@@ -31,7 +30,6 @@ router.post("/subtasks/:id", async (req, res) => {
   try{
     const response = await Task.save()
     res.send(response)
-    console.log(response)
   }
   catch(err) {
     res.status(400).send(err.errors)

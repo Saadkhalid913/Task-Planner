@@ -371,9 +371,10 @@ li {
 }
 
 .task-add-subtask-button {
-  width: 10%;
+  width: 15%;
   align-self: center;
   margin-top: 1rem;
+  padding: 0.5rem;
 }
 
 .subtask {
@@ -450,6 +451,15 @@ li {
   justify-content: space-between;
 }
 
+.subtask-popup > div > button {
+  padding: 0.5rem;
+  border-radius: 2px;
+  justify-self: center;
+  width: 30%;
+  align-self: center;
+  border-radius: 2px;
+}
+
 .subtask-popup > div > input {
   padding: 0.25rem;
   height: 100%;
@@ -462,9 +472,8 @@ li {
   width: 65%;
 }
 
-#add-subtask-button-popop {
-  height: 15%;
-  width: 30%;
-  align-self: center;
-  border-radius: 2px;
+#cancel-subtask-popup {
+  background-color: var(--main-black-tone);
+  border: 2px solid white;
+  color: white;
 }
