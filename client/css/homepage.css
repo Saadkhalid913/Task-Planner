@@ -1,5 +1,5 @@
 :root {
-  --main-background: #f0f7f4;
+  --main-background: rgb(240, 247, 244);
   --main-accent: #648de5;
   --main-secondary: #b3bfb8;
   --main-tertiary: #dce6e1;
@@ -208,8 +208,8 @@ li {
 .list-task:hover {
   transform: scale(1.01, 1.01);
 }
-.list-task:active {
-  transform: scale(1.02, 1.01);
+.overview-wrapper:active {
+  transform: scale(1.02, 1.02);
 }
 .list-task .overview-wrapper {
   width: 100%;
@@ -379,14 +379,27 @@ li {
 
 .subtask {
   display: flex;
+  margin-top: 0.5rem;
+  animation-duration: 150ms;
+  transition-duration: 150ms;
+  border-radius: 2px;
+  background-color: var(--main-background);
 }
+
+.subtask:hover {
+  transform: scale(1.01, 1.01);
+}
+
+.subtask:active {
+  background-color: #00a8788a;
+  transform: scale(1.01, 1.01);
+}
+
 .subtask span {
-  border: 1px solid black;
   font-size: 100%;
   padding: 0.5rem;
 }
 .subtask-list-wrapper {
-  border: 3px solid green;
   margin-top: 1.5rem;
 }
 
@@ -394,6 +407,7 @@ li {
   width: 60%;
 }
 .subtask-priority {
+  color: var(--main-background);
   width: 20%;
   text-align: center;
 }

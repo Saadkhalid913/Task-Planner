@@ -5,7 +5,7 @@ const SubTaskSchema = new mongoose.Schema({
   name: {type: String, minlength: 3, maxlength: 255, required: true},
   priority: {type: String, enum:["low", "medium", "high", "urgent", "undecided"], default: "undecided", lowercase: true},
   deadline: {type: Date, required: false},
-  Completed: Boolean
+  completed: {type: Boolean, default: false}
 })
 
 

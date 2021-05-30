@@ -36,6 +36,17 @@ router.post("/subtasks/:id", async (req, res) => {
   }
 })
 
+
+router.put("/subtasks/complete/:id/:subtaskid", async (req, res) => {
+  const id = req.params.id;
+  const subtaskId = req.params.subtaskid;
+  const task = await TaskModel.findById(id).catch(err => res.send(err))
+  const subtask = task.subtasks.find(sub => sub.id == subtaskId)
+  if (subtask.completed) subtask.completed = false 
+  else subtask.completed = true 
+  await task.save()
+  res.send(subtask)
+})
 router.delete("/:id", async (req,res) => {
   const id = req.params.id;
   const task = await TaskModel.findByIdAndDelete(id)

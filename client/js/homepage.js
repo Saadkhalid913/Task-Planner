@@ -1,11 +1,11 @@
-
 const TOTAL_TASKS = {}
 let CurrentTaskId = ""
+
 const GREEN = "#00A878"
 const YELLOW = "#FFE066"
 const RED = "#EF233C"
 const URGENT_RED = "#970012"
-
+const MAIN_BACKGROUND_C = "rgb(240, 247, 244)"
 const PRIORITY_HASH = {
   "low": GREEN,
   "medium": YELLOW,
@@ -46,10 +46,11 @@ function main() {
   const AddTaskPopupToggleButton = document.getElementById("popup-toggle")
   AddTaskPopupToggleButton.addEventListener("click", showPopup)
   
-  document.getElementById("add-subtask-button-popop").addEventListener("click", SubmitSubtaskFromPopup)
+  document.getElementById("add-subtask-button-popup").addEventListener("click", SubmitSubtaskFromPopup)
   document.getElementById("popup-cancel").addEventListener("click", showPopup)
   document.getElementById("popup-add").addEventListener("click", TaskSubmitButton)
   document.getElementById("add-category-button").addEventListener("click", CategoryAddFromInput)
+  document.getElementById("cancel-subtask-popup").addEventListener("click", ToggleSubtaskPopup)
 }
 
 async function Notification(message){
@@ -234,20 +235,31 @@ function AddAllSubtasks(Task){
 
   const SubtaskList = document.getElementById("subtask-list-" + id)
   for (let subtask of subtasks){
-    SubtaskList.appendChild(CreateSubtaskItem(subtask))
+    SubtaskList.appendChild(CreateSubtaskItem(id, subtask))
   }
   return SubtaskList
 }
 
-function CreateSubtaskItem(subtask) {
+function CreateSubtaskItem(parentId, subtask) {
   const id = subtask._id
+  const priorityColor = PRIORITY_HASH[subtask.priority]
   const subtaskListItem = document.createElement("li")
   subtaskListItem.className= "subtask"
   subtaskListItem.id = id 
   subtaskListItem.innerHTML = 
   `<span class="subtask-name">${subtask.name}</span>
-  <span class="subtask-priority">${subtask.priority}</span>
+  <span class="subtask-priority" style="background-color: ${priorityColor}">${subtask.priority}</span>
   <span class="subtask-deadline">${CalculateDeadlineDelta(subtask)}</span>`
+  if (subtask.completed) subtaskListItem.style.backgroundColor = GREEN
+  subtaskListItem.addEventListener("click", async () => {
+    const response = await fetch(`http://localhost:3000/api/tasks/subtasks/complete/${parentId}/${id}`, {method: "PUT"})
+                                .catch(err => Notification("Please connect to the network"))
+    const responseSubtask = await response.json();
+    const item = document.getElementById(responseSubtask._id)
+    if (!responseSubtask.completed) item.style.backgroundColor = MAIN_BACKGROUND_C
+    else item.style.backgroundColor = GREEN  
+  })
+
   return subtaskListItem
 }
 
@@ -355,7 +367,7 @@ async function AddSubtask(id, subtask) {
   const subtaskResponse = await response.json()
 
   document.getElementById("subtask-list-"+ CurrentTaskId).appendChild(
-    CreateSubtaskItem(subtaskResponse.subtasks.find(task => task.name == subtask.name))
+    CreateSubtaskItem(CurrentTaskId, subtaskResponse.subtasks.find(task => task.name == subtask.name))
   )
 
 }
