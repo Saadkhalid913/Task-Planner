@@ -14,6 +14,38 @@
       <p></p>
     </div>
 
+    <div class="subtask-popup" id="subtask-popup">
+      <div>
+        <label for="subtask-name-input-box">Name</label>
+        <input id="subtask-name-input-box" name="subtask-name-input-box" />
+      </div>
+      <div>
+        <label for="subtask-deadline-input-box">Deadline</label>
+        <input type="datetime-local" id="subtask-deadline-input-box" />
+      </div>
+
+      <div>
+        <label for="subtask-priority-select">Priority</label>
+        <select id="add-subtask-priority-popup" name="task-priority">
+          <option style="background-color: #00a878" value="low">Low</option>
+          <option style="background-color: #ffe066" value="medium">
+            Medium
+          </option>
+          <option style="background-color: #ef233c" value="high">High</option>
+          <option style="background-color: #970012" value="urgent">
+            Urgent
+          </option>
+          <option
+            style="background-color: #000000; color: white"
+            value="undecided"
+          >
+            Undecided
+          </option>
+        </select>
+      </div>
+      <button id="add-subtask-button-popop">Add Subtask</button>
+    </div>
+
     <div class="add-task-popup" id="add-task-popup">
       <div>
         <label for="task-name-input">Name</label>

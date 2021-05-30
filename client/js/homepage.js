@@ -1,6 +1,6 @@
 
 const TOTAL_TASKS = {}
-
+let CurrentTaskId = ""
 const GREEN = "#00A878"
 const YELLOW = "#FFE066"
 const RED = "#EF233C"
@@ -27,7 +27,9 @@ function TaskSubmitButton() {
 
 function main() {
   // adding all tasks
-  const filter = new URLSearchParams(window.location.search).get("filter").replaceAll("-", " ")
+  let filter = new URLSearchParams(window.location.search).get("filter")
+  if (filter) filter = filter.replaceAll("-", " ")
+
   try {
     GetTasks(filter)
     AddCategories()
@@ -44,7 +46,7 @@ function main() {
   const AddTaskPopupToggleButton = document.getElementById("popup-toggle")
   AddTaskPopupToggleButton.addEventListener("click", showPopup)
   
-
+  document.getElementById("add-subtask-button-popop").addEventListener("click", SubmitSubtaskFromPopup)
   document.getElementById("popup-cancel").addEventListener("click", showPopup)
   document.getElementById("popup-add").addEventListener("click", TaskSubmitButton)
   document.getElementById("add-category-button").addEventListener("click", CategoryAddFromInput)
@@ -195,32 +197,61 @@ function CreateListTask(Task){
   // subtasks array 
   const subtaskListWrapperDiv = document.createElement("div")
   subtaskListWrapperDiv.className = "subtask-list-wrapper"
-  subtaskListWrapperDiv.appendChild(CreateSubtaskList(Task.subtasks))
+
+  const SubtaskList = document.createElement("ul")
+  SubtaskList.id = "subtask-list-" + id
+  SubtaskList.className = "task-subtask-list"
+  subtaskListWrapperDiv.appendChild(SubtaskList)
+
+  
   expandedItemDiv.appendChild(subtaskListWrapperDiv)
+  
+  const AddSubtaskButton = document.createElement("button")
+  AddSubtaskButton.innerHTML = "Add Subtask"
+  AddSubtaskButton.className = "task-add-subtask-button"
+  AddSubtaskButton.addEventListener("click", () => {
+    CurrentTaskId = id
+
+    ToggleSubtaskPopup()
+    
+  })  
+  expandedItemDiv.appendChild(AddSubtaskButton)
+  
+  const popup = document.getElementById("subtask-popup");
+  
   
   //adding description and subtask div into the expanded div
   taskElement.appendChild(expandedItemDiv)
   taskElement.appendChild(document.createElement("br"))
-
-
+  
+  
   const taskList = document.getElementById("main-task-list")
   taskList.appendChild(taskElement)
+  AddAllSubtasks(Task)
 }
 
-function CreateSubtaskList(Subtasks){
-  const SubtaskList = document.createElement("ul")
-  for (let subtask of Subtasks){
-    const id = subtask._id
-    const subtaskListItem = document.createElement("li")
-    subtaskListItem.className= "subtask"
-    subtaskListItem.id = id 
-    subtaskListItem.innerHTML = 
-    `<span class="subtask-name">${subtask.name}</span>
-    <span class="subtask-priority">${subtask.priority}</span>
-    <span class="subtask-deadline">${subtask.deadline || "Unset"}</span>`
-    SubtaskList.appendChild(subtaskListItem)
+function AddAllSubtasks(Task){
+  const id = Task._id
+  const subtasks = Task.subtasks
+  if (!subtasks) return 
+
+  const SubtaskList = document.getElementById("subtask-list-" + id)
+  for (let subtask of subtasks){
+    SubtaskList.appendChild(CreateSubtaskItem(subtask))
   }
   return SubtaskList
+}
+
+function CreateSubtaskItem(subtask) {
+  const id = subtask._id
+  const subtaskListItem = document.createElement("li")
+  subtaskListItem.className= "subtask"
+  subtaskListItem.id = id 
+  subtaskListItem.innerHTML = 
+  `<span class="subtask-name">${subtask.name}</span>
+  <span class="subtask-priority">${subtask.priority}</span>
+  <span class="subtask-deadline">${CalculateDeadlineDelta(subtask)}</span>`
+  return subtaskListItem
 }
 
 // test function 
@@ -244,7 +275,7 @@ async function PopupToJSON() {
   const linkInput = document.getElementById("add-task-link")
   const categoryInput = document.getElementById("add-task-category-input")
 
-  if (!nameInput.value || !descInput.value) return // input validation 
+  if (!nameInput.value || !descInput.value) return Notification("Please enter a name and description") // input validation 
 
   const task = {
     name: nameInput.value,
@@ -254,7 +285,6 @@ async function PopupToJSON() {
     deadline:deadlineInput.value,
     category: categoryInput.value
   }
-  console.log(categoryInput.value)
   const response = await fetch("http://localhost:3000/api/tasks", {
     method:"POST",
     mode:"cors",
@@ -296,5 +326,53 @@ function CalculateDeadlineDelta(task) {
   const formattedTimeDelta = `${days}d ${hours}h ${minutes}m`
   return formattedTimeDelta
 }
+
+function SubmitSubtaskFromPopup() {
+  const nameBox = document.getElementById("subtask-name-input-box")
+  const deadlineBox = document.getElementById("subtask-deadline-input-box") 
+  const priorityBox = document.getElementById("add-subtask-priority-popup")
+
+  if (!nameBox.value) return Notification("Please add a name")
+
+  const Subtask = {
+    name: nameBox.value,
+    deadline: deadlineBox.value,
+    priority: priorityBox.value,
+  }
+  
+  AddSubtask(CurrentTaskId, Subtask)
+  ToggleSubtaskPopup()
+  nameBox.value = ""
+  deadlineBox.value = ""
+  priorityBox.value = ""
+}
+
+async function AddSubtask(id, subtask) {
+  const response =await fetch("http://localhost:3000/api/tasks/subtasks/" + id, {
+    method:"POST",
+    mode: "cors",
+    headers: {"Content-Type": "application/json"},
+    body: JSON.stringify(subtask)
+  })
+
+  const subtaskResponse = await response.json()
+  document.getElementById("subtask-list-"+ CurrentTaskId).appendChild(
+    CreateSubtaskItem(subtaskResponse.subtasks.find(task => task.name = subtask.name))
+  )
+
+}
+
+function ToggleSubtaskPopup() {
+  const popup = document.getElementById("subtask-popup");
+
+  if (popup.style.visibility == "hidden" || !popup.style.visibility) {
+    popup.style.visibility = "visible"
+    popup.style.height = "35%"
+    return
+  }
+  popup.style.visibility = "hidden"
+  popup.style.height = "0vh"
+}
+
 
 main()
