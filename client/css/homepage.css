@@ -197,6 +197,7 @@ li {
 
 .list-task {
   margin: 1rem;
+  height: 100%;
   transition-duration: 250ms;
   animation-duration: 250ms;
   height: 4rem;
@@ -377,6 +378,13 @@ li {
   padding: 0.5rem;
 }
 
+.task-delete-button {
+  width: 15%;
+  align-self: center;
+  margin-top: 1rem;
+  padding: 0.5rem;
+}
+
 .subtask {
   display: flex;
   margin-top: 0.5rem;
@@ -398,6 +406,9 @@ li {
 .subtask span {
   font-size: 100%;
   padding: 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 .subtask-list-wrapper {
   margin-top: 1.5rem;

@@ -216,6 +216,16 @@ function CreateListTask(Task){
     ToggleSubtaskPopup()
   })  
   expandedItemDiv.appendChild(AddSubtaskButton)
+
+  const TaskDeleteButton = document.createElement("button")
+  TaskDeleteButton.className = "task-delete-button"
+  TaskDeleteButton.innerHTML= "Delete"
+  TaskDeleteButton.addEventListener("click", async () => {
+    const response = await fetch(`http://localhost:3000/api/tasks/${id}`, {method: "DELETE"})
+    if (response.status == 200) return document.getElementById(id).remove()
+  })
+
+  expandedItemDiv.appendChild(TaskDeleteButton)
   
   //adding description and subtask div into the expanded div
   taskElement.appendChild(expandedItemDiv)
