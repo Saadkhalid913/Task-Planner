@@ -143,7 +143,7 @@ function AddNewCatigoryToSidebar(Category) {
 function showPopup() {
   const popup = document.getElementById("add-task-popup");
   if (popup.style.visibility == "hidden" || !popup.style.visibility) {
-    popup.style.height = "75vh";
+    popup.style.height = "85vh";
     popup.style.visibility = "visible";
     for (let item of popup.children)
       item.style.display = "flex"
