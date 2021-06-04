@@ -6,7 +6,8 @@ mongoose.connect("mongodb://localhost:27017/TaskPlanner")
 const TaskRouter = require("./api/routes/Tasks")
 const CategoryRouter = require("./api/routes/Categories")
 
-const subtask = require("./api/Schemas/Schemas").SubTaskModel
+const subtask = require("./api/Schemas/Schemas").SubTaskModel;
+const { eventNames } = require("./api/Schemas/CategoryModel");
 
 
 const app = express()
@@ -18,6 +19,6 @@ app.use("/api/categories", CategoryRouter) // add validation to schemas
 
             
 
-const PORT = 3000;
+const PORT = 3000 || process.env.PORT
 
 app.listen(PORT, () => console.log("Server listening on port: " + PORT))
